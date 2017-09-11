@@ -1,3 +1,13 @@
+https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches
+
+//working with remotes
+
+//	https://help.github.com/articles/changing-a-remote-s-url
+//	https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line
+
+
+
+
 
 
 another TTS
@@ -7,3 +17,11 @@ another TTS
 
 
 		- https://github.com/innerdvations/phonegap-tts-3.0
+
+
+
+
+working w cordova plugins
+//	http://devgirl.org/2014/04/09/phonegapcordova-cli-adding-plugins/
+
+//	http://docs.phonegap.com/references/phonegap-cli/install/

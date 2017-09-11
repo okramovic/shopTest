@@ -70,7 +70,7 @@ var app = {
 
         //alert("spot 1");
 
-        TTS.speak({
+        /*TTS.speak({
             text: 'hallo meine liebe, was ist das',
             locale: 'de-DE',
             rate: 1
@@ -78,18 +78,8 @@ var app = {
             alert('Text succesfully spoken');
         }, function (reason) {
             alert(reason);
-        });
-
+        });*/
         
-        
-        //alert(typeof "DOM" === 'string');
-        setTimeout(function(){
-
-            alert(TTS);
-
-        }, 10000)
-        
-        //alert("hi")
 
 
         var cam = document.getElementById('cam');
@@ -587,29 +577,6 @@ function fsSuccess(fs){
                     //alert( cordova.file.externalDataDirectory)
                    // listDir(fs, fs.root.fullPath.toString())
 
-                /*fs.root.createReader().readEntries
-                    (
-                        function(entries)
-                        {
-                            //finds the ul with id named contentList
-                            var ul = document.getElementById('contentList');
-                            // for all the entries inside the directory loop the following
-                            for(var I in entries)
-                            {
-                                // creates li and /li
-                                 var li = document.createElement('li');
-                                // creates the name of the contents
-                                li.appendChild(document.createTextNode(entries[I].name));
-                                ul.appendChild(li);
-                            }
-                            // this will only print the newest file created do not use the following if you want to print all the contents in directory
-                            // for(var i in entries)document.getElementById('storageContent').value=entries[i].name;
-                        }
-                    );*/
-
-
-                //console.log('file system open: ' + fs.name);
-                //alert('file system open: ' + fs.name);
 
                 var printDirPath = function(entry){
                     console.log("Dir path - " + entry.fullPath);
@@ -626,39 +593,7 @@ function fsSuccess(fs){
                 }, function(){ //alert("dir err");
                 })
 
-                /*fs.root.getFile("blablabla.txt", { create: false, exclusive: false }, function (fileEntry) {
 
-                    //console.log("fileEntry is file?" + fileEntry.isFile.toString());
-                    // fileEntry.name = 'blablabla.txt'
-                    // fileEntry.fullPath == '/someFile.txt'
-                    //writeFile(fileEntry, null, function(){  alert("done");});
-                    //console.log(fileEntry); //alert(fileEntry.filesystem);
-                    //readFile(fileEntry);
-
-                }, function(){  alert("errr");});*/
-
-                    /*var reader = fs.createReader();
-                    fs.createReader().readEntries(function (entries) {
-                                    
-                                    cons.innerText = "sukces?"// + entries;
-                                    console.log(entries);
-                                },
-
-                                function (err) {
-                                  alert("er1"+err);
-                                }
-                              );*/
-
-                    /*fs.root.getFile("newPersistentFile.txt", { create: false, exclusive: false }, function (fileEntry) {
-
-                            //console.log("fileEntry is file?" + fileEntry.isFile.toString());
-                            // fileEntry.name == 'someFile.txt'
-                            // fileEntry.fullPath == '/someFile.txt'
-                           // writeFile(fileEntry, null);
-
-                            }, function(er){
-                                alert("error")
-                        });*/
 }
 function listDir(fs, path){
 
@@ -1266,9 +1201,7 @@ function updateShops(cb){
                 loadProducts();
             }
 }
-function log(smt){
-         //console.log(smt);
-}
+function log(smt){/*console.log(smt);*/ }
 
 
 function loadProducts(){
@@ -1374,8 +1307,9 @@ function createProductDiv(pr, ind){
 
 
             var divImg = document.createElement('div');
+            divImg.setAttribute('class', 'iD_initial');
 
-                    divImg.style = "display:flex; justify-content:center; align-items: center; border- 1px solid green; width: 33%;"
+                    //divImg.style = ""
 
                     var img = document.createElement('img');
                     img.src = cordova.file.externalDataDirectory + pr.filename;
@@ -1415,11 +1349,29 @@ function createProductDiv(pr, ind){
             D.appendChild(div);
 
             //if (pr.id) var x = pr.id.toString();
-            //var at = "editItem("+x+")"
-            //alert(at);
             //D.setAttribute("onmousedown", "startTimer()");
             //D.setAttribute("onmouseup"  , "endTimer()");
             //D.setAttribute("ondblclick", at);
+
+            var counter = 0;
+            D.addEventListener('click', function(ev){
+
+                    //alert('click')
+                    counter ++;
+                    var el = ev.currentTarget
+
+                    setTimeout(function(){
+
+                            if (counter === 1){     counter = 0;
+                                                    //alert("large")
+                                                    enlargeItem(el);
+                            }
+                            if (counter > 1){       counter = 0;}
+                    }, 200)
+
+                    
+
+            });
 
             D.addEventListener('dblclick', function(ev){
 
@@ -1435,6 +1387,72 @@ function createProductDiv(pr, ind){
             //D.setAttribute("ondblclick", "editItem()")
 
             document.getElementById('productsDiv').appendChild(D);            
+
+
+
+}
+function enlargeItem(el){
+
+        //alert(document.getElementById(el.id).getAttribute('class'));
+
+        var c_div = document.getElementById(el.id).getAttribute('class'), 
+            pic = document.getElementById(el.id).querySelector('img'), 
+            pic_div, info
+            //cls
+
+            //alert(pic_div)
+
+        if (c_div === 'displayedProductDiv'){
+
+                    document.getElementById(el.id).setAttribute('class', 'divEnlarged')
+                    
+                    pic_div = document.getElementById(el.id).querySelector('div.iD_initial');
+                    
+                    pic_div.setAttribute('class', 'iD_large');
+                    
+                    info = document.getElementById(el.id).querySelector('div.productInfo')//productInfo_L
+                    //alert(info);
+                    
+                    info.setAttribute( 'class', 'productInfo_L');
+
+                    setTimeout(function () {
+                        
+                        info.style.display = 'none'
+                    }, 50)
+
+        } else if (c_div === 'divEnlarged'){
+                    
+                    document.getElementById(el.id).setAttribute('class', 'displayedProductDiv')
+
+                    pic_div = document.getElementById(el.id).querySelector('div.iD_large')
+                    pic_div.setAttribute('class', 'iD_initial');
+                    
+                    info = document.getElementById(el.id).querySelector('div.productInfo_L')
+                    info.setAttribute( 'class', 'productInfo');
+                    info.style.display = 'block';
+                    setTimeout(function () {
+                        
+                        
+                    }, 0)                    
+        }
+
+
+        
+        //var pic = document.getElementById(el.id).querySelector('img')
+        //alert("class: " + pic.getAttribute('class'))
+        //var cls = pic.getAttribute('class')
+
+        //if (cls === 'preview')          pic.setAttribute('class', 'picEnlarged')
+        //else if (cls === 'picEnlarged') pic.setAttribute('class', 'preview')
+
+        
+
+
+        // enlarge image
+        // put text under image
+        // hide others
+
+
 
 
 
