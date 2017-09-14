@@ -17,6 +17,22 @@
  * under the License.
  */
 
+ /*
+
+    to do
+    after deleting item, it gets buggy?
+
+    
+
+
+    done:
+
+    - when new product is added, divs hide in strange order, it looks bad
+    - after adding new product, its thumbnail should dissappear and not be seen further
+    - repair editing
+    - deleting items
+ */
+
 var userdata = {
         "countries":{"all countries":{"all cities":{"all shops":{"name":"all shops", "prods":[]}}}}
 };
@@ -102,8 +118,6 @@ var app = {
                     navigator.camera.getPicture(function(imgUri){
 
                             
-
-                            
                             imageToSave = imgUri;
                             
                             //for (var prop in imgUri){logg(prop);}
@@ -114,11 +128,13 @@ var app = {
 
                                 //var img = document.getElementById('pic').src = files;
                                 //img.setAttribute("class", "preview");
+
+
                             // shows submit button
                             document.getElementById('prodSubmit').style.display = "block";
 
                             // files, blobs url conversions etc
-                            //  https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript/16245768#16245768
+                            // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript/16245768#16245768
 
                             displayThumb(imageToSave, function(x){
                                         
@@ -163,7 +179,10 @@ var app = {
 
                                                                                 //alert("img file saved");
                                                                                 saveDataFile(updateDisplay)
+
                                                                         }
+
+
                                                                         fw.onerror = function(e){
 
                                                                                 alert(e);
@@ -178,41 +197,49 @@ var app = {
                                                             alert("code 888");}
                                                         )
                                                         //alert("got file: " + fileEntry.fullPath);
-                                                        /*logg("namae   " + fileEntry.name)
+                                                            /*logg("namae   " + fileEntry.name)
 
-                                                        for (prop in fileEntry){
-                                                            logg(prop + "  " + fileEntry[prop]);
-                                                        }*/
-                                                        /*alert(resBlob.type);
-                                                        saveFile(fname, resBlob,updateDisplay);
-                                                        alert("done?");*/
-                                                        //saveImg(fileEntry, fname, updateDisplay);
+                                                            for (prop in fileEntry){
+                                                                logg(prop + "  " + fileEntry[prop]);
+                                                            }*/
+                                                            /*alert(resBlob.type);
+                                                            saveFile(fname, resBlob,updateDisplay);
+                                                            alert("done?");*/
+                                                            //saveImg(fileEntry, fname, updateDisplay);
 
 
                                             }, function(er){ 
                                                     alert("123 + er\n" + JSON.stringify(er))  
                                             })
-
-
-                                                
+    
                                     })
 
         })
         function updateDisplay(){
+
                             document.getElementById('addProductDiv').style.display = "none";
-                            document.getElementById('prodSubmit').style.display = "none";
+                                /* button */ document.getElementById('prodSubmit').style.display = "none";
 
-                                                                document.getElementById('addProductButton').style.display = "flex";
+                            /* show + button */ document.getElementById('addProductButton').style.display = "flex";
 
+                            // this was originally elsewhere
+                            document.getElementById('productsDiv').style.display = "block";
+                            document.getElementById('filterProds').style.display= 'flex';
 
-                                                                // remove img thumbnail
-                                                                document.getElementById('pic').src = "";
+                            // remove img thumbnail
+                            document.getElementById('pic').src = "";
 
+                            // empty canvas
+                            var canvas = document.getElementById("myCanvas");
+                                canvas.style.display = 'none';
 
-                                                                // empty all textfileds && rating
+                                var c = canvas.getContext("2d");
+                                c.clearRect(0,0,360,360);
 
-                                                                //alert("now loading products anew");
-                                                                loadProducts();
+                            // empty all textfileds && rating
+
+                            //alert("now loading products anew");
+                            loadProducts();
         }
 
     }
@@ -249,6 +276,7 @@ function displayThumb(file, cb){
 
                 var canvas = document.getElementById("myCanvas");
                     canvas.setAttribute("class", "preview");
+                    canvas.style.display = 'block';
                     //canvas.style.border = "2px solid";
                 var c = canvas.getContext("2d");
 
@@ -560,7 +588,7 @@ function saveImg(file, filename, cb){
 
                     function resOnError(er){ alert(" img save error" + JSON.stringify(er))}
 
-            /*window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory+'bjr1.txt',function(entry){
+                    /*window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory+'bjr1.txt',function(entry){
 
                     writeFile(entry, newCont)
                     },function(er){ alert ("write Err");});*/
@@ -627,13 +655,13 @@ function addProduct(){
 
         
 
-        if ( document.getElementById('CountrySel').querySelector('option:checked').text === "all countries") {
+        /*if ( document.getElementById('CountrySel').querySelector('option:checked').text === "all countries") {
 
-                            alert("choose country first"); 
+                            //alert("choose country first"); 
                             //document.getElementById('addProductButton').style.display = "flex";
 
-                            return
-        } else {
+                            //return
+        } else {*/
                 document.getElementById('addProductButton').style.display = "none";
 
                 document.getElementById('addProductDiv').style.display = "block";
@@ -643,7 +671,7 @@ function addProduct(){
 
                 document.getElementById('filterProds').style.display= 'none';
 
-        }
+        //}
 }
 function cancelAddProduct(){
 
@@ -735,19 +763,18 @@ function submitNewProduct(cb){
 
                                             userdata.countries[country][city][shop].prods.push(newP);
 
-
                                             //alert("newly: " + JSON.stringify( userdata.countries[country][city][shop]));//[city][shop] ) );
-
-                                            //alert(JSON.stringify(userdata));
 
                                             setTimeout(function(){
 
                                                         //saveDataFile();
 
+                                                            // jpg format -> to save image
                                                         if (cb) cb(filename);
 
-                                                        document.getElementById('productsDiv').style.display = "block";
-                                                        document.getElementById('filterProds').style.display= 'flex';
+                                                        // this is elsewhere and it works better there
+                                                            //document.getElementById('productsDiv').style.display = "block";
+                                                            //document.getElementById('filterProds').style.display= 'flex';
 
                                                         initializeForm()
 
@@ -766,10 +793,12 @@ function submitNewProduct(cb){
 
                                                         //saveDataFile();
 
+                                                            // jpg format -> to save image
                                                         if (cb) cb(filename);
 
-                                                        document.getElementById('productsDiv').style.display = "block";
-                                                        document.getElementById('filterProds').style.display= 'flex';
+                                                        // this is elsewhere and it works better there
+                                                            //document.getElementById('productsDiv').style.display = "block";
+                                                            //document.getElementById('filterProds').style.display= 'flex';
 
                                                         initializeForm()
                                                         
@@ -777,37 +806,39 @@ function submitNewProduct(cb){
 
                 }
 
-                //alert("?? " + JSON.stringify(userdata.countries[country][city][shop]));
 }
 
 
 
 function openInput(el){
 
-            
+            var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
+            ct     = document.getElementById("CitySel").querySelector("option:checked").text,
+            sh     = document.getElementById("ShopSel").querySelector("option:checked").text;
+
             document.getElementById('filterProds').style.display= 'none';
 
             var id1 = "add" + el + "Div";
 
-           // alert(id);
             var div = document.getElementById(id1);
             div.setAttribute("class", "addLocationVisible");
 
             document.getElementById("add"+el+"In").focus();
 
             var id = el + "Sel"
-            console.log("id",id);
+            
 
-            var options = document.getElementById(id).childNodes;
+            //var options = document.getElementById(id).childNodes;
+            //var countries = document.getElementById("CountrySel").childNodes;
+            //var cities    = document.getElementById("CitySel").childNodes;
 
-            var countries = document.getElementById("CountrySel").childNodes;
-            var cities    = document.getElementById("CitySel").childNodes;
-
-            console.log(countries)
+            //console.log(countries)
 
 
-            if (id === "CitySel" && countries.length === 0) {alert("no cntries, add country first"); hideLocInput(el);}
-            else if (id === "ShopSel" && (countries.length === 0 || cities.length === 0)) {alert("no cities, add one country & city"); hideLocInput(el);}
+            //if (id === "CitySel" && countries.length === 0) {alert("no cntries, add country first"); hideLocInput(el);}
+            //else if (id === "ShopSel" && (countries.length === 0 || cities.length === 0)) {alert("no cities, add one country & city"); hideLocInput(el);}
+
+            if ( id === "CitySel" && cn === 'all countries'){ alert("choose country first"); hideLocInput(el); }
 }
 function hideLocInput(el){
 
@@ -889,7 +920,10 @@ function confLocation(item){
                                                                     else cntries[i].selected = false;
                                                                 }
 
-                                                                updateCities(updateShops);
+                                                                updateCities(function(){
+
+                                                                            updateShops(loadProducts);
+                                                                });
 
                                                        // })()
 
@@ -925,7 +959,8 @@ function confLocation(item){
                                                     }
                                                     updateShops(function(){
 
-                                                                saveDataFile();    
+                                                                saveDataFile();
+                                                                loadProducts();  
                                                     });     
 
                                 });
@@ -970,6 +1005,7 @@ function confLocation(item){
 
                                         }
 
+                                        loadProducts();
                                         saveDataFile();
 
                                 })
@@ -1190,7 +1226,7 @@ function updateShops(cb){
 
                     }
             }
-            //alert(typeof "DOM" === 'string');
+            
             // execute plain callback func
             if (cb && typeof cb === 'function') cb()
 
@@ -1211,17 +1247,16 @@ function loadProducts(){
             var par1 = document.getElementById('productsDiv');
                 par1.innerHTML = "";
 
-            var x = par1.children //par1.childNodes;
-            
-            //alert(x instanceof Array + " " + x.length);
-            //alert(x instanceof Array)//Object);
+            /*var x = par1.children //par1.childNodes;
+                
+                //alert(x instanceof Array + " " + x.length);
+                //alert(x instanceof Array)//Object);
 
-            for (var i=x.length; i>0;i--){
+                for (var i=x.length; i>0;i--){
 
-                alert(x[i].tagName);
-                x[i].remove();
-            }
-            //if (x) x.remove();
+                    alert(x[i].tagName);
+                    x[i].remove();
+                }*/ //if (x) x.remove();
 
             
 
@@ -1272,30 +1307,69 @@ function loadProducts(){
                     }
             }*/
 
-            var ps = userdata.countries[cn][ct][sh].prods;
-            //alert("no of products: " + ps.length);
 
-            if (ps.length === 0) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
+            // if maximally specific location is chosen
 
-            var parent = document.getElementById('productsDiv');
-
-            ps.forEach(function(p,i){
-
-                                                    /**/
-                                                    createProductDiv(p,i);
-                                                        
-                                                })
+            if (cn!=='all countries' && ct!=='all cities' && sh!=='all shops'){
 
 
+                        var Ps = userdata.countries[cn][ct][sh].prods;
+                        
+
+                        if (Ps.length === 0) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
+
+                        //var parent = document.getElementById('productsDiv');
+
+                        Ps.forEach(function(p,i){
+
+                                                                createProductDiv(p,i,cn,ct,sh);
+                                                                    
+                                                            })
+
+            // if something is specified vaguely
+            } else {
 
 
+                        aggregateProds( function(results, ads, originalIndexes){
+
+                                if (results.length === 0) { document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>';
+                                                            return
+                                }
+
+                                var prevLoc = '';
+
+                                //alert("res: " + results.length + "  ads: " + ads.length + "  o.i. " + originalIndexes.length);
+                                results.forEach(function(p,i){
+
+                                            var currLoc = ads[i].cn + " / " + ads[i].ct + " / " + ads[i].sh
+                                            
+
+                                            if (prevLoc === '' || prevLoc !== currLoc){ 
+
+                                                                //alert("empty " + currLoc);
+                                                                var node = document.createElement('div')
+                                                                    if (prevLoc==='') node.innerHTML = '<div class="currLoc first">'+ currLoc +'</div>'
+                                                                    else node.innerHTML = '<div class="currLoc">'+ currLoc +'</div>'
+                                                                    document.getElementById('productsDiv').appendChild(node);
+
+                                                                prevLoc = currLoc;
+
+                                            }
+
+                                            createProductDiv(   p, originalIndexes[i] 
+                                                                ,ads[i].cn, ads[i].ct, ads[i].sh
+                                                            );
+                                })
+
+                        })
+            }
 
 
             /*var target = document.getElementById('productsDiv');
 
             var img*/
 }
-function createProductDiv(pr, ind){
+function createProductDiv(pr, ind, cn, ct, sh){
             //alert(pr);
 
             var D = document.createElement('div');
@@ -1303,8 +1377,11 @@ function createProductDiv(pr, ind){
             //if (pr.id) alert(pr.id)
             D.setAttribute("id", pr.id);
 
-            
+                    D.setAttribute("data-cn",cn);
+                    D.setAttribute("data-ct",ct);
+                    D.setAttribute("data-sh",sh);
 
+                    //alert(D.getAttribute("data-cn") + " + " + D.getAttribute("data-ct") );
 
             var divImg = document.createElement('div');
             divImg.setAttribute('class', 'iD_initial');
@@ -1325,7 +1402,7 @@ function createProductDiv(pr, ind){
 
             div.innerHTML = '<div style="">' + 
 
-                                    '<p style="font-size: 22px; font-weight: 350; margin-bottom: 5px">' + pr.prodType + '</p>' ;
+                    '<div style="font-size: 22px; font-weight: 300; margin-bottom: 5px">' + pr.prodType + '</div>' ;
 
                     if (pr.prodName) div.innerHTML += '<p>' + pr.prodName + '</p>'
                     if (pr.prodDesc) div.innerHTML += '<p>' + pr.prodDesc + '</p>'
@@ -1349,9 +1426,9 @@ function createProductDiv(pr, ind){
             D.appendChild(div);
 
             //if (pr.id) var x = pr.id.toString();
-            //D.setAttribute("onmousedown", "startTimer()");
-            //D.setAttribute("onmouseup"  , "endTimer()");
-            //D.setAttribute("ondblclick", at);
+                //D.setAttribute("onmousedown", "startTimer()");
+                //D.setAttribute("onmouseup"  , "endTimer()");
+                //D.setAttribute("ondblclick", at);
 
             var counter = 0;
             D.addEventListener('click', function(ev){
@@ -1369,10 +1446,8 @@ function createProductDiv(pr, ind){
                             if (counter > 1){       counter = 0;}
                     }, 200)
 
-                    
-
             });
-
+            
             D.addEventListener('dblclick', function(ev){
 
                     //alert(D.srcElement.id + "  " + D.target.id + "  " + D.currentTarget.id)//.relatedTarget);
@@ -1391,6 +1466,194 @@ function createProductDiv(pr, ind){
 
 
 }
+function aggregateProds(cb){
+
+            var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
+            ct     = document.getElementById("CitySel").querySelector("option:checked").text,
+            sh     = document.getElementById("ShopSel").querySelector("option:checked").text;
+
+            var aggPs = [],
+                adr   = [],
+                origI = [];
+
+            if (cn === 'all countries'){
+
+                    if (ct === 'all cities' && sh === 'all shops'){
+
+                            for (var CN in userdata.countries){
+
+                                    for (var CT in userdata.countries[CN]){
+
+                                            for (var SH in userdata.countries[CN][CT]){
+
+                                                userdata.countries[CN][CT][SH].prods.forEach(function(item, i){
+
+                                                        aggPs.push(item);
+                                                        adr.push({cn:CN, ct:CT , sh:SH});
+                                                        origI.push(i);
+                                                })
+
+                                            }
+                                    }
+                            }   
+                            if (cb) {   cb(aggPs, adr, origI); 
+                                        return
+                            }
+                    } else if (ct==='all cities' && sh !== 'all shops'){
+
+                            for (var CN in userdata.countries){
+
+                                for (var CT in userdata.countries[CN]){
+
+                                    for (var SH in userdata.countries[CN][CT]){
+
+                                            if (userdata.countries[CN][CT][SH].name===sh){
+
+                                                    userdata.countries[CN][CT][SH].prods.forEach(function(item, i){
+
+                                                            aggPs.push(item);
+                                                            adr.push({cn:CN, ct:CT , sh:SH});
+                                                            origI.push(i);
+                                                    })
+                                            }
+                                    }
+                                }
+                            }   
+                            if (cb) {   cb(aggPs, adr, origI); 
+                                        return
+                            }
+
+                    // these two possibilities should not be possible anymore
+                                } else if (ct!=='all cities' && sh ==='all shops'){
+
+                                        for (var CN in userdata.countries){
+
+                                            for (var CT in userdata.countries[CN]){
+
+                                                    if (CT === ct){
+
+                                                        //for (var SH in userdata.countries[CN][CT]){}
+                                                    }
+                                            }
+                                        }
+                                        alert('location nonsense1');
+                                        return
+
+                                        if (cb) {   cb(aggPs); 
+                                                        return
+                                        }
+
+                                // go thru all countries, spec. ct && spec. sh and get its products        
+                                } else if (ct!=='all cities' && sh !=='all shops'){
+
+                                        for (var CN in userdata.countries){
+
+                                            for (var CT in userdata.countries[CN]){
+
+                                                    if (CT === ct){
+
+                                                            for (var SH in userdata.countries[CN][CT]){
+
+                                                                if (SH === sh) { userdata.countries[CN][CT][SH].prods.forEach(function(item){
+
+                                                                                                //aggPs.push(item)
+                                                                                })
+
+                                                                }
+                                                            }
+                                                    }
+                                            }
+                                        }
+                                        alert('location nonsense2');
+                                        return
+                                }
+
+            } else if (ct==='all cities'){
+
+                    /*if (cn === 'all countries' && sh === 'all shops'){
+
+                            for (var CT in userdata.countries[cn]){
+
+                                    for (var SH in userdata.countries[cn][CT]){
+
+                                        userdata.countries[cn][CT][SH].prods.forEach(function(item, i){
+
+                                                    aggPs.push(item)
+                                        })
+                                    }
+                            }
+                            if (cb){
+
+                                    cb(aggPs)
+                                    return
+                            } 
+                            } else*/ 
+
+                    if (cn!=='all countries' /*all cities*/ && sh ==='all shops'){
+
+                            for (var CT in userdata.countries[cn]){
+
+                                for (var SH in userdata.countries[cn][CT]){
+
+                                        userdata.countries[cn][CT][SH].prods.forEach(function(item, i){
+
+                                                    aggPs.push(item);
+                                                    adr.push({cn:cn, ct:CT , sh:SH});
+                                                    origI.push(i);
+                                        })
+
+                                }
+
+                            }
+                            if (cb){
+
+                                    cb(aggPs, adr, origI);
+                                    return
+                            }
+                    } /*else if (cn==='all countries' &&  sh!=='all shops'){}*/
+
+
+                    // in cn, in all its cities, get products from shop sh 
+                    else if (cn!=='all countries' /* all cities */ && sh!=='all shops'){
+
+                            for (var CT in userdata.countries[cn]){
+
+                                for (var SH in userdata.countries[cn][CT]){
+
+                                        if (SH === sh) {    userdata.countries[cn][CT][SH].prods.forEach(function(item,i){
+
+                                                                    aggPs.push(item);
+                                                                    adr.push({cn:cn, ct:CT,sh:SH});
+                                                                    origI.push(i);
+                                                            })
+                                        }
+                                }
+                            }
+                            if (cb){
+
+                                    cb(aggPs,adr,origI);
+                                    return
+                            }
+                    }
+
+            } else if (sh ==='all shops'){
+
+                    for (var SH in userdata.countries[cn][ct]){
+
+                            userdata.countries[cn][ct][SH].prods.forEach(function(item,i){
+
+                                    aggPs.push(item);
+                                    adr.push({cn: cn, ct:ct, sh: SH});
+                                    origI.push(i);
+                            })
+
+                    }
+                    if (cb) { cb(aggPs, adr, origI);
+                    }
+
+            }
+}
+
 function enlargeItem(el){
 
         //alert(document.getElementById(el.id).getAttribute('class'));
@@ -1452,15 +1715,14 @@ function enlargeItem(el){
         // put text under image
         // hide others
 
-
-
-
-
 }
 function editItem(div, id, arrayIndex){
 
         
         //alert(ev.srcElement.id + "\n" + ev.target.id + "\n" + ev.currentTarget.id)
+        //return
+
+        //alert(div.getAttribute("data-cn") + " / " + div.getAttribute("data-ct") + " / " + div.getAttribute("data-sh"))
         //return
 
         document.getElementById('filterProds').setAttribute("disabled", true);
@@ -1490,9 +1752,13 @@ function editItem(div, id, arrayIndex){
 
         //if (window.getComputedStyle(div).backgroundColor === "rgba(255,0,0,0.3)") div.style.backgroundColor = "blue"
 
-        var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
+        /*var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
             ct     = document.getElementById("CitySel").querySelector("option:checked").text,
-            sh     = document.getElementById("ShopSel").querySelector("option:checked").text;
+            sh     = document.getElementById("ShopSel").querySelector("option:checked").text;*/
+        var cn = div.getAttribute("data-cn"),
+            ct = div.getAttribute("data-ct"),
+            sh = div.getAttribute("data-sh");
+
 
         var prods = userdata.countries[cn][ct][sh].prods;
 
@@ -1544,17 +1810,17 @@ function editItem(div, id, arrayIndex){
 
 
                             //document.getElementById('editItem').removeEventListener('click', edit);
-                            //document.getElementById('deleteItem').removeEventListener('click', deleteIt);
-                            //document.getElementById('cancelEditItem').removeEventListener('click', cancelEditItem);
+                                //document.getElementById('deleteItem').removeEventListener('click', deleteIt);
+                                //document.getElementById('cancelEditItem').removeEventListener('click', cancelEditItem);
 
-                            //document.getElementById('editSubmit').removeEventListener('click', submit);
+                                //document.getElementById('editSubmit').removeEventListener('click', submit);
 
-                            //get rid of duplicated event listeners? (too complicated)
-                            /*document.getElementById('editPanel').outerHTML = '<div id="editPanel" style="display: flex">'+
-                                                                                    '<div   id="cancelEditItem   >X</div>' + 
-                                                                                    '<div   id="editItem"        >edit</div>' +
-                                                                                    '<div   id="deleteItem"      >ndelete</div>' + 
-                                                                             '</div>'*/
+                                //get rid of duplicated event listeners? (too complicated)
+                                /*document.getElementById('editPanel').outerHTML = '<div id="editPanel" style="display: flex">'+
+                                                                                        '<div   id="cancelEditItem   >X</div>' + 
+                                                                                        '<div   id="editItem"        >edit</div>' +
+                                                                                        '<div   id="deleteItem"      >ndelete</div>' + 
+                                                                                 '</div>'*/
         }
 
                 document.getElementById('editSubmit').addEventListener('click', submit);                                                                             
@@ -1710,9 +1976,9 @@ function editItem(div, id, arrayIndex){
                                         document.getElementById('editPanel').style.display = "none";
                                         
 
-                                        var country = document.getElementById("CountrySel").querySelector("option:checked").text;
-                                        var city    = document.getElementById('CitySel').querySelector('option:checked').text; 
-                                        var shop    = document.getElementById('ShopSel').querySelector('option:checked').text; 
+                                        var country = cn//document.getElementById("CountrySel").querySelector("option:checked").text;
+                                        var city    = ct//document.getElementById('CitySel').querySelector('option:checked').text; 
+                                        var shop    = sh//document.getElementById('ShopSel').querySelector('option:checked').text; 
                     
                                         var targetID = "a", filename;
                     
@@ -1722,10 +1988,14 @@ function editItem(div, id, arrayIndex){
                     
                                                         targetID = i;
                                                         filename = p.filename
+                                                        //alert("to delete\n\n" + p.prodType +"   id: "+ targetID +"\n\n" + filename )
                                                     }
+                                                    if (i === userdata.countries[country][city][shop].prods.length-1) 
+                                                            userdata.countries[country][city][shop].prods.splice(targetID, 1);
                                         })
                                         //alert(userdata.countries[country][city][shop].prods.length)// JSON.stringify();
-                                        userdata.countries[country][city][shop].prods.splice(targetID, 1);
+
+                                        //userdata.countries[country][city][shop].prods.splice(targetID, 1);
                     
 
 
@@ -1737,6 +2007,7 @@ function editItem(div, id, arrayIndex){
                     
                                                                         loadStoredData();
                                                                 
+                                                                        document.getElementById('addProductButton').style.display = "flex";
                                                                 })
                                                     })
                     
@@ -1750,10 +2021,10 @@ function editItem(div, id, arrayIndex){
                         for (var i=0; i<divs.length;i++){
                             divs[i].style.backgroundColor = "transparent";
                         }
-                        document.getElementById('filterProds').disabled = false;
-                        //document.getElementById('filterProds').setAttribute("disabled", false);
+                        document.getElementById('filterProds').disabled = false; //document.getElementById('filterProds').setAttribute("disabled", false);
                         document.getElementById('editPanel').style.display = "none";
 
+                        document.getElementById('addProductButton').style.display = "flex";
                         //alert ("cnaceleed");
                 }
 
@@ -1820,36 +2091,52 @@ function filterProds(){
                         sh     = document.getElementById("ShopSel").querySelector("option:checked").text;
 
                         
+                    if (cn!=='all countries' && ct!=='all cities' && sh!=='all shops'){
 
-                    var ps = userdata.countries[cn][ct][sh].prods;
+                                goThruPs(userdata.countries[cn][ct][sh].prods);
 
-                    //if (ps.length === 0) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
-                    //var val = inp.value//.toString();
-                    //alert(val + "  " + typeof val);
-                    var hasProds = false
+                    } else {
 
-                    ps.forEach(function(p,i){
-                            
-                            var incl = false;
+                                aggregateProds(function(result){
 
-                            for (var prop in p){
-                                            if ( (prop === "prodType" || prop === "prodName" || prop === "prodDesc" ) &&
 
-                                                p[prop].includes(document.getElementById('filterProds').value)) { 
+                                                goThruPs(result);
 
-                                                            incl = true; 
-                                                            hasProds = true;
-                                                            break
+                                })
+                    }
 
-                                                        alert("nju item"); 
-                                                        }
-                            }
+                    function goThruPs(ps){
 
-                            if (incl) createProductDiv(p,i)
+                                //var ps = userdata.countries[cn][ct][sh].prods;
 
-                            if (i===ps.length-1 && !hasProds) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
-                    })
+                                //if (ps.length === 0) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
+                                //var val = inp.value//.toString();
+                                //alert(val + "  " + typeof val);
+                                var hasProds = false
 
+                                ps.forEach(function(p,i){
+                                        
+                                        var incl = false;
+
+                                        for (var prop in p){
+                                                        if ( (prop === "prodType" || prop === "prodName" || prop === "prodDesc" ) &&
+
+                                                            p[prop].includes(document.getElementById('filterProds').value)) { 
+
+                                                                        incl = true; 
+                                                                        hasProds = true;
+                                                                        break
+
+                                                                    //alert("nju item"); 
+                                                                    }
+                                        }
+
+                                        if (incl) createProductDiv(p,i)
+
+                                        if (i===ps.length-1 && !hasProds) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
+                                })
+
+                    }
                     //alert("done " + ps.length);
         }, 1000)
 
@@ -1918,8 +2205,6 @@ function initializeForm(){
                     document.getElementById('cam').style.display = "block";  
 
                     document.getElementById('pic').src = "";
-
-
 }
 function logg(smt){
             var el = document.getElementById('contentList');

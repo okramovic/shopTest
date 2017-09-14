@@ -331,8 +331,20 @@ input[type='text']::placeholder{
     border: 2px solid white;
     border-radius: 10px;
     }
+.currLoc{
+    text-align: center;
+    font-size: 27px; 
+    font-weight: 200; 
+    
+    text-decoration- underline;
 
-
+    margin: 45px 0px 45px;
+    border-bottom- 1px solid;
+    border- 1px dashed;
+    }
+.first{
+    margin: 10px 0px 10px;
+}
 .displayedProductDiv{
     position: relative;
     border-bottom- 1px solid;
@@ -357,6 +369,8 @@ input[type='text']::placeholder{
 
     margin: 0px;
     padding: 0px;
+
+    font-weight: 200;
     }
 
 #filterProds{
@@ -370,6 +384,7 @@ input[type='text']::placeholder{
     
     font-size: 20px;
     text-align: center;
+    font-weight: 200;
 
     background-color: #E4E4E4;
 
@@ -380,7 +395,7 @@ input[type='text']::placeholder{
     background-color: #E4E4E4;
 
     text-align: center;
-    text-decoration: underline;
+    text-decoration- underline;
     color: rgba(0,0,0,0.8);   
     }
 #filterProds:focus{

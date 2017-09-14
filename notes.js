@@ -1,4 +1,9 @@
-https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches
+
+// GIT
+//https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches
+
+//	merging branches
+//	https://www.atlassian.com/git/tutorials/git-merge
 
 //working with remotes
 
@@ -10,7 +15,7 @@ https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-man
 
 
 
-another TTS
+/* 	another TTS
 
 		- https://github.com/macdonst/TTS
 			https://gist.github.com/macdonst/962784
@@ -18,7 +23,7 @@ another TTS
 
 		- https://github.com/innerdvations/phonegap-tts-3.0
 
-
+*/
 
 
 working w cordova plugins
