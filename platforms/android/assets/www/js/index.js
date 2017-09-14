@@ -20,7 +20,10 @@
  /*
 
     to do
-    after deleting item, it gets buggy?
+    - test test of git
+
+    
+    - after deleting item, it gets buggy?
 
     
 
@@ -31,6 +34,7 @@
     - after adding new product, its thumbnail should dissappear and not be seen further
     - repair editing
     - deleting items
+    - when filtering products, CN/CT/SH 'headline' is shown
  */
 
 var userdata = {
@@ -1237,7 +1241,7 @@ function updateShops(cb){
                 loadProducts();
             }
 }
-function log(smt){/*console.log(smt);*/ }
+
 
 
 function loadProducts(){
@@ -1246,18 +1250,6 @@ function loadProducts(){
 
             var par1 = document.getElementById('productsDiv');
                 par1.innerHTML = "";
-
-            /*var x = par1.children //par1.childNodes;
-                
-                //alert(x instanceof Array + " " + x.length);
-                //alert(x instanceof Array)//Object);
-
-                for (var i=x.length; i>0;i--){
-
-                    alert(x[i].tagName);
-                    x[i].remove();
-                }*/ //if (x) x.remove();
-
             
 
             var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
@@ -1265,48 +1257,7 @@ function loadProducts(){
             sh     = document.getElementById("ShopSel").querySelector("option:checked").text;
 
             //alert("load prods " + cn + " "+ct + " "+ sh);
-            /*for (var cn in userdata.countries){
-
-                    var country = userdata.countries[cn]
-
-                    //alert("counry" + country);
-
-                    if (document.getElementById("CountrySel").querySelector("option:checked").text === cn){
-
-                        for (var city in userdata.countries[cn]){
-
-                                if ( userdata.countries[cn][city] !== {}){
-
-                                    for (var shop in userdata.countries[cn][city]){
-
-                                        if ( userdata.countries[cn][city][shop].hasOwnProperty("prods")){
-
-                                                var location = userdata.countries[cn][city][shop];
-                                                //alert( shop + " has products");
-
-                                                var prods = location.prods;
-                                                var parent = document.getElementById('productsDiv');
-
-                                                prods.forEach(function(p,i){
-
-                                                    var img = document.createElement('img');
-                                                    img.src = cordova.file.externalDataDirectory + p.filename;
-                                                    img.setAttribute("class", "preview");
-
-                                                    parent.appendChild(img);
-
-                                                        
-                                                })
-                                        }
-                                    }
-
-
-                                }
-
-                        }
-                    }
-            }*/
-
+            
 
             // if maximally specific location is chosen
 
@@ -1450,16 +1401,12 @@ function createProductDiv(pr, ind, cn, ct, sh){
             
             D.addEventListener('dblclick', function(ev){
 
-                    //alert(D.srcElement.id + "  " + D.target.id + "  " + D.currentTarget.id)//.relatedTarget);
-                    //document.getElementById('editPanel').style.display = "flex";
-
                     editItem(ev.currentTarget, ev.currentTarget.id, ind);
+                        //alert(D.srcElement.id + "  " + D.target.id + "  " + D.currentTarget.id)//.relatedTarget);
+                        //document.getElementById('editPanel').style.display = "flex";
             });
 
 
-
-
-            //D.setAttribute("ondblclick", "editItem()")
 
             document.getElementById('productsDiv').appendChild(D);            
 
@@ -1714,7 +1661,6 @@ function enlargeItem(el){
         // enlarge image
         // put text under image
         // hide others
-
 }
 function editItem(div, id, arrayIndex){
 
@@ -2078,13 +2024,8 @@ function filterProds(){
                             }*/
 
         
-        //startTimer(function(){
-                    //loadProducts();
-                    //alert("counter: " + counter);
         setTimeout(function(){
                     document.getElementById('productsDiv').innerHTML = "";
-
-        
 
                     var cn = document.getElementById("CountrySel").querySelector("option:checked").text,
                         ct     = document.getElementById("CitySel").querySelector("option:checked").text,
@@ -2094,25 +2035,25 @@ function filterProds(){
                     if (cn!=='all countries' && ct!=='all cities' && sh!=='all shops'){
 
                                 goThruPs(userdata.countries[cn][ct][sh].prods);
-
                     } else {
 
-                                aggregateProds(function(result){
+                                aggregateProds(function(result, adr, origI){
 
 
-                                                goThruPs(result);
+                                                goThruPs(result,adr, origI);
 
                                 })
                     }
 
-                    function goThruPs(ps){
+                    function goThruPs(ps, adr, origI){
 
                                 //var ps = userdata.countries[cn][ct][sh].prods;
 
                                 //if (ps.length === 0) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
                                 //var val = inp.value//.toString();
                                 //alert(val + "  " + typeof val);
-                                var hasProds = false
+                                var hasProds = false,
+                                    prevLoc  = ''
 
                                 ps.forEach(function(p,i){
                                         
@@ -2131,8 +2072,34 @@ function filterProds(){
                                                                     }
                                         }
 
-                                        if (incl) createProductDiv(p,i)
+                                        // this adds location description in in front of each prod. group
+                                        if (incl) {
 
+                                                    var currLoc = adr[i].cn + " / " + adr[i].ct + " / " + adr[i].sh;
+
+                                                    if (prevLoc === '' || prevLoc !== currLoc){ 
+
+                                                                    
+                                                                    var node = document.createElement('div')
+                                                                        if (prevLoc==='') node.innerHTML = '<div class="currLoc first">'+ currLoc +'</div>'
+                                                                        else node.innerHTML = '<div class="currLoc">'+ currLoc +'</div>'
+                                                                        document.getElementById('productsDiv').appendChild(node);
+
+                                                                    prevLoc = currLoc;
+
+                                                    }
+
+                                                    //createProductDiv(p,i)
+                                                    createProductDiv(   p, origI[i], 
+                                                                        adr[i].cn, adr[i].ct, adr[i].sh
+                                                                    )
+
+                                                    //      p, originalIndexes[i] 
+                                                    //      ,ads[i].cn, ads[i].ct, ads[i].sh
+
+                                        }
+
+                                        // if there arent any prods to match
                                         if (i===ps.length-1 && !hasProds) document.getElementById('productsDiv').innerHTML = '<p>no products to display</p>'
                                 })
 
@@ -2218,6 +2185,7 @@ function logg(smt){
             c2.innerHTML = smt;//.toString();
             el.appendChild(c2);
 }
+function log(smt){/*console.log(smt);*/ }
 function seeConsole(){
 
         var el = document.getElementById('contentList');
@@ -2227,7 +2195,6 @@ function seeConsole(){
 
         if (dis === "block") {el.style.display = "none"; return}
         else if (dis === "none") el.style.display = "block" //alert("none");
-
 }
 
 

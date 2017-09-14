@@ -70,9 +70,9 @@ body {
 }
 
 h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
+    font-size:30px;
+    font-weight-normal;
+    margin-0px;
     overflow:visible;
     padding:0px;
     text-align:center;
@@ -343,7 +343,7 @@ input[type='text']::placeholder{
     border- 1px dashed;
     }
 .first{
-    margin: 10px 0px 10px;
+    margin: 20px 0px 40px;
 }
 .displayedProductDiv{
     position: relative;
@@ -401,6 +401,8 @@ input[type='text']::placeholder{
 #filterProds:focus{
     border- none;
     outline: none;
+
+    font-style: italic;
     }
 #editPanel{
 
