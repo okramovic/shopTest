@@ -122,7 +122,7 @@ label {
     margin-top- 10px;
     padding-top- 10px;
     }
-input[type='text']{
+input[type='text'], input[type='number']{
 
     height: 30px;
 
@@ -262,6 +262,7 @@ input[type='text']::placeholder{
 
     color red;
     }
+
 #addProductDiv input[type='text']:focus{
 
     text-align: center;
@@ -273,6 +274,19 @@ input[type='text']::placeholder{
 
     text-align: center;
     }
+#addProductDiv input[type='number']{
+    border: none;
+    border-radius: 4px;
+
+    text-align: center;
+    }
+#addProductDiv input[type='number']:focus{
+
+    text-align: center;
+    outline: none;
+    }
+
+
 #cam{
 
     width: 33%;
@@ -358,7 +372,7 @@ input[type='text']::placeholder{
     justify-content- space-between;
     align-items: center;
 
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 250;
     }
 .productInfo{

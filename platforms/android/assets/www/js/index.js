@@ -20,11 +20,11 @@
  /*
 
     to do
-    - test test of git
-
+    - add prod desc 2
+    - add price field
     
     - after deleting item, it gets buggy?
-
+    - test test of git
     
 
 
@@ -704,6 +704,8 @@ function submitNewProduct(cb){
                 // get P name and Desc
                 if (document.getElementById('prodName').value !== "") var prodName = document.getElementById('prodName').value.toString();
                 if (document.getElementById('prodDesc').value !== "") var prodDesc = document.getElementById('prodDesc').value.toString();
+                if (document.getElementById('prodDesc2').value !== "") var prodDesc2 = document.getElementById('prodDesc2').value.toString();
+                if (document.getElementById('prodPrice').value !== "") var prodPrice = document.getElementById('prodPrice').value;
 
 
                 // check for radios - one must be checked
@@ -741,6 +743,8 @@ function submitNewProduct(cb){
 
                         if (prodName) newP.prodName = prodName;
                         if (prodDesc) newP.prodDesc = prodDesc;
+                        if (prodDesc2) newP.prodDesc2 = prodDesc2;
+                        if (prodPrice) newP.prodPrice = prodPrice;
                 
 
 
@@ -1357,15 +1361,18 @@ function createProductDiv(pr, ind, cn, ct, sh){
 
                     if (pr.prodName) div.innerHTML += '<p>' + pr.prodName + '</p>'
                     if (pr.prodDesc) div.innerHTML += '<p>' + pr.prodDesc + '</p>'
+                    if (pr.prodDesc2) div.innerHTML += '<p>' + pr.prodDesc2 + '</p>'
 
 
                     // rating 
                     var r = pr.rating, r_text;
 
                     if      (r == 1) r_text = "avoid"
-                    else if (r == 2) r_text = "buy only in crisis"
+                    else if (r == 2) r_text = "buy? rather not"
                     else if (r == 3) r_text = "good"
                     else if (r == 4) r_text = "very good"    
+
+                    if (pr.prodPrice) r_text += ", for " + pr.prodPrice
 
                     div.innerHTML += '<p>' + r_text + '</p>'
 
@@ -1730,7 +1737,7 @@ function editItem(div, id, arrayIndex){
 
                             var P = prods[arrayIndex];
 
-                            //alert(P.prodType);
+                            
 
                             document.getElementById('prodType').value = P.prodType;
 
@@ -1739,6 +1746,11 @@ function editItem(div, id, arrayIndex){
 
                             if (P.prodDesc) document.getElementById('prodDesc').value = P.prodDesc
                                 else document.getElementById('prodDesc').value= ""
+
+                                if (P.prodDesc2) document.getElementById('prodDesc2').value = P.prodDesc2
+                                    else document.getElementById('prodDesc2').value= ""
+                                if (P.prodPrice) document.getElementById('prodPrice').value = P.prodPrice
+                                    else document.getElementById('prodPrice').value= ""
 
                             // auto-select rating
                             var rating = document.getElementById('radios').querySelectorAll('input[type = "radio"]')
@@ -1786,6 +1798,8 @@ function editItem(div, id, arrayIndex){
 
                         if (document.getElementById('prodName').value !== "") njuP.prodName = document.getElementById('prodName').value.toString();
                         if (document.getElementById('prodDesc').value !== "") njuP.prodDesc = document.getElementById('prodDesc').value.toString();
+                        if (document.getElementById('prodDesc2').value !== "") njuP.prodDesc2 = document.getElementById('prodDesc2').value.toString();
+                        if (document.getElementById('prodPrice').value !== "") njuP.prodPrice = document.getElementById('prodPrice').value;
 
 
                         //if (!document.querySelector('input[name = "rating"]:checked')) {alert ("choose rating"); return}
@@ -2060,7 +2074,8 @@ function filterProds(){
                                         var incl = false;
 
                                         for (var prop in p){
-                                                        if ( (prop === "prodType" || prop === "prodName" || prop === "prodDesc" ) &&
+                                                        if ( (prop === "prodType" || prop === "prodName" || prop === "prodDesc" || 
+                                                              prop === "prodDesc2" || prop === "prodPrice") &&
 
                                                             p[prop].includes(document.getElementById('filterProds').value)) { 
 
@@ -2159,7 +2174,9 @@ function initializeForm(){
 
                     document.getElementById('prodType').value = ""
                     document.getElementById('prodName').value = ""
-                    document.getElementById('prodDesc').value = ""        
+                    document.getElementById('prodDesc').value = ""
+                    document.getElementById('prodDesc2').value = ""
+                    document.getElementById('prodPrice').value = ""
 
                     var rs = document.getElementById('radios').querySelectorAll('input[type="radio"]')
 
